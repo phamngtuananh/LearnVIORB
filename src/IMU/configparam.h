@@ -9,7 +9,7 @@ namespace ORB_SLAM2
 
 class ConfigParam
 {
-public:
+  public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     ConfigParam(std::string configfile);
@@ -24,7 +24,7 @@ public:
     static double GetImageDelayToIMU();
     static bool GetAccMultiply9p8();
 
-    static double GetG(){return _g;}
+    static double GetG() { return _g; }
 
     std::string _bagfile;
     std::string _imageTopic;
@@ -33,10 +33,10 @@ public:
     static std::string getTmpFilePath();
     static std::string _tmpFilePath;
 
-    static double GetVINSInitTime(){return _nVINSInitTime;}
-    static bool GetRealTimeFlag() {return _bRealTime;}
+    static double GetVINSInitTime() { return _nVINSInitTime; }
+    static bool GetRealTimeFlag() { return _bRealTime; }
 
-private:
+  private:
     static Eigen::Matrix4d _EigTbc;
     static cv::Mat _MatTbc;
     static Eigen::Matrix4d _EigTcb;
@@ -50,6 +50,6 @@ private:
     static bool _bRealTime;
 };
 
-}
+} // namespace ORB_SLAM2
 
 #endif // CONFIGPARAM_H

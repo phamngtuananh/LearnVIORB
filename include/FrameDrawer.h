@@ -25,11 +25,10 @@
 #include "MapPoint.h"
 #include "Map.h"
 
-#include<opencv2/core/core.hpp>
-#include<opencv2/features2d/features2d.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
 
-#include<mutex>
-
+#include <mutex>
 
 namespace ORB_SLAM2
 {
@@ -39,8 +38,8 @@ class Viewer;
 
 class FrameDrawer
 {
-public:
-    FrameDrawer(Map* pMap);
+  public:
+    FrameDrawer(Map *pMap);
 
     // Update info from the last processed frame.
     void Update(Tracking *pTracker);
@@ -48,7 +47,7 @@ public:
     // Draw last processed frame.
     cv::Mat DrawFrame();
 
-protected:
+  protected:
     double mStartTime;
     double mCurTime;
 
@@ -65,11 +64,11 @@ protected:
     vector<int> mvIniMatches;
     int mState;
 
-    Map* mpMap;
+    Map *mpMap;
 
     std::mutex mMutex;
 };
 
-} //namespace ORB_SLAM
+} // namespace ORB_SLAM2
 
 #endif // FRAMEDRAWER_H

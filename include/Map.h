@@ -27,8 +27,6 @@
 
 #include <mutex>
 
-
-
 namespace ORB_SLAM2
 {
 
@@ -37,55 +35,55 @@ class KeyFrame;
 
 class KFIdComapre
 {
-public:
-    bool operator()(const KeyFrame* kfleft,const KeyFrame* kfright) const;
+  public:
+    bool operator()(const KeyFrame *kfleft, const KeyFrame *kfright) const;
 };
 
 class Map
 {
-public:
+  public:
     // Update after an absolute scale is available
     void UpdateScale(const double &scale);
 
     //-----------------------------------------
-public:
+  public:
     Map();
 
-    void AddKeyFrame(KeyFrame* pKF);
-    void AddMapPoint(MapPoint* pMP);
-    void EraseMapPoint(MapPoint* pMP);
-    void EraseKeyFrame(KeyFrame* pKF);
-    void SetReferenceMapPoints(const std::vector<MapPoint*> &vpMPs);
+    void AddKeyFrame(KeyFrame *pKF);
+    void AddMapPoint(MapPoint *pMP);
+    void EraseMapPoint(MapPoint *pMP);
+    void EraseKeyFrame(KeyFrame *pKF);
+    void SetReferenceMapPoints(const std::vector<MapPoint *> &vpMPs);
 
-    std::vector<KeyFrame*> GetAllKeyFrames();
-    std::vector<MapPoint*> GetAllMapPoints();
-    std::vector<MapPoint*> GetReferenceMapPoints();
+    std::vector<KeyFrame *> GetAllKeyFrames();
+    std::vector<MapPoint *> GetAllMapPoints();
+    std::vector<MapPoint *> GetReferenceMapPoints();
 
     long unsigned int MapPointsInMap();
-    long unsigned  KeyFramesInMap();
+    long unsigned KeyFramesInMap();
 
     long unsigned int GetMaxKFid();
 
     void clear();
 
-    vector<KeyFrame*> mvpKeyFrameOrigins;
+    vector<KeyFrame *> mvpKeyFrameOrigins;
 
     std::mutex mMutexMapUpdate;
 
     // This avoid that two points are created simultaneously in separate threads (id conflict)
     std::mutex mMutexPointCreation;
 
-protected:
-    std::set<MapPoint*> mspMapPoints;
-    std::set<KeyFrame*,KFIdComapre> mspKeyFrames;
+  protected:
+    std::set<MapPoint *> mspMapPoints;
+    std::set<KeyFrame *, KFIdComapre> mspKeyFrames;
 
-    std::vector<MapPoint*> mvpReferenceMapPoints;
+    std::vector<MapPoint *> mvpReferenceMapPoints;
 
     long unsigned int mnMaxKFid;
 
     std::mutex mMutexMap;
 };
 
-} //namespace ORB_SLAM
+} // namespace ORB_SLAM2
 
 #endif // MAP_H

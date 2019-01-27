@@ -6,21 +6,20 @@ namespace ORB_SLAM2
 NavState::NavState()
 {
     //_qR.setIdentity();     // rotation
-    _P.setZero();         // position
-    _V.setZero();         // velocity
+    _P.setZero(); // position
+    _V.setZero(); // velocity
 
-    _BiasGyr.setZero();   // bias of gyroscope
-    _BiasAcc.setZero();   // bias of accelerometer
+    _BiasGyr.setZero(); // bias of gyroscope
+    _BiasAcc.setZero(); // bias of accelerometer
 
     _dBias_g.setZero();
     _dBias_a.setZero();
 }
 
 // if there's some other constructor, normalizeRotation() is needed
-NavState::NavState(const NavState &_ns):
-    _P(_ns._P), _V(_ns._V), _R(_ns._R),
-    _BiasGyr(_ns._BiasGyr), _BiasAcc(_ns._BiasAcc),
-    _dBias_g(_ns._dBias_g), _dBias_a(_ns._dBias_a)
+NavState::NavState(const NavState &_ns) : _P(_ns._P), _V(_ns._V), _R(_ns._R),
+                                          _BiasGyr(_ns._BiasGyr), _BiasAcc(_ns._BiasAcc),
+                                          _dBias_g(_ns._dBias_g), _dBias_a(_ns._dBias_a)
 {
     //normalizeRotation();
 }
@@ -57,16 +56,14 @@ void NavState::IncSmall(Vector15d update)
     // rotation
     //Matrix3d dR = Sophus::SO3::exp(upd_Phi).matrix();
     Sophus::SO3 dR = Sophus::SO3::exp(upd_Phi);
-    _R = Get_R()*dR;
+    _R = Get_R() * dR;
     //_qR = Quaterniond(R*dR);
     //normalizeRotation();    // remember to normalize rotation
     // delta bias of gyroscope
     _dBias_g += upd_dBg;
     // delta bias of accelerometer
     _dBias_a += upd_dBa;
-
 }
-
 
 void NavState::IncSmallPR(Vector6d dPR)
 {
@@ -109,8 +106,7 @@ void NavState::IncSmallPVR(Vector9d updatePVR)
     _V += upd_V;
     // rotation
     Sophus::SO3 dR = Sophus::SO3::exp(upd_Phi);
-    _R = Get_R()*dR;
-
+    _R = Get_R() * dR;
 }
 
 void NavState::IncSmallBias(Vector6d updatedBias)
@@ -133,7 +129,6 @@ void NavState::IncSmallBias(Vector6d updatedBias)
     _dBias_g += upd_dBg;
     // delta bias of accelerometer
     _dBias_a += upd_dBa;
-
 }
 
-}
+} // namespace ORB_SLAM2

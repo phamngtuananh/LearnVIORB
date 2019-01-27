@@ -20,12 +20,12 @@
 
 #include "Map.h"
 
-#include<mutex>
+#include <mutex>
 
 namespace ORB_SLAM2
 {
 
-bool KFIdComapre::operator ()(const KeyFrame* kfleft,const KeyFrame* kfright) const
+bool KFIdComapre::operator()(const KeyFrame *kfleft, const KeyFrame *kfright) const
 {
     return kfleft->mnId < kfright->mnId;
 }
@@ -33,26 +33,28 @@ bool KFIdComapre::operator ()(const KeyFrame* kfleft,const KeyFrame* kfright) co
 void Map::UpdateScale(const double &scale)
 {
     unique_lock<mutex> lock(mMutexMapUpdate);
-    for(std::set<KeyFrame*,KFIdComapre>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
+    for (std::set<KeyFrame *, KFIdComapre>::iterator sit = mspKeyFrames.begin(), send = mspKeyFrames.end(); sit != send; sit++)
     {
-        KeyFrame* pKF = *sit;
+        KeyFrame *pKF = *sit;
         cv::Mat Tcw = pKF->GetPose();
-        cv::Mat tcw = Tcw.rowRange(0,3).col(3)*scale;
-        tcw.copyTo(Tcw.rowRange(0,3).col(3));
+        cv::Mat tcw = Tcw.rowRange(0, 3).col(3) * scale;
+        tcw.copyTo(Tcw.rowRange(0, 3).col(3));
         pKF->SetPose(Tcw);
     }
-    for(std::set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
+    for (std::set<MapPoint *>::iterator sit = mspMapPoints.begin(), send = mspMapPoints.end(); sit != send; sit++)
     {
-        MapPoint* pMP = *sit;
+        MapPoint *pMP = *sit;
         //pMP->SetWorldPos(pMP->GetWorldPos()*scale);
         pMP->UpdateScale(scale);
     }
-    std::cout<<std::endl<<"... Map scale updated ..."<<std::endl<<std::endl;
+    std::cout << std::endl
+              << "... Map scale updated ..." << std::endl
+              << std::endl;
 }
 
 //---------------------------------------
 
-Map::Map():mnMaxKFid(0)
+Map::Map() : mnMaxKFid(0)
 {
 }
 
@@ -60,8 +62,8 @@ void Map::AddKeyFrame(KeyFrame *pKF)
 {
     unique_lock<mutex> lock(mMutexMap);
     mspKeyFrames.insert(pKF);
-    if(pKF->mnId>mnMaxKFid)
-        mnMaxKFid=pKF->mnId;
+    if (pKF->mnId > mnMaxKFid)
+        mnMaxKFid = pKF->mnId;
 }
 
 void Map::AddMapPoint(MapPoint *pMP)
@@ -94,16 +96,16 @@ void Map::SetReferenceMapPoints(const vector<MapPoint *> &vpMPs)
     mvpReferenceMapPoints = vpMPs;
 }
 
-vector<KeyFrame*> Map::GetAllKeyFrames()
+vector<KeyFrame *> Map::GetAllKeyFrames()
 {
     unique_lock<mutex> lock(mMutexMap);
-    return vector<KeyFrame*>(mspKeyFrames.begin(),mspKeyFrames.end());
+    return vector<KeyFrame *>(mspKeyFrames.begin(), mspKeyFrames.end());
 }
 
-vector<MapPoint*> Map::GetAllMapPoints()
+vector<MapPoint *> Map::GetAllMapPoints()
 {
     unique_lock<mutex> lock(mMutexMap);
-    return vector<MapPoint*>(mspMapPoints.begin(),mspMapPoints.end());
+    return vector<MapPoint *>(mspMapPoints.begin(), mspMapPoints.end());
 }
 
 long unsigned int Map::MapPointsInMap()
@@ -118,7 +120,7 @@ long unsigned int Map::KeyFramesInMap()
     return mspKeyFrames.size();
 }
 
-vector<MapPoint*> Map::GetReferenceMapPoints()
+vector<MapPoint *> Map::GetReferenceMapPoints()
 {
     unique_lock<mutex> lock(mMutexMap);
     return mvpReferenceMapPoints;
@@ -132,10 +134,10 @@ long unsigned int Map::GetMaxKFid()
 
 void Map::clear()
 {
-    for(set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
+    for (set<MapPoint *>::iterator sit = mspMapPoints.begin(), send = mspMapPoints.end(); sit != send; sit++)
         delete *sit;
 
-    for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
+    for (set<KeyFrame *>::iterator sit = mspKeyFrames.begin(), send = mspKeyFrames.end(); sit != send; sit++)
         delete *sit;
 
     mspMapPoints.clear();
@@ -145,4 +147,4 @@ void Map::clear()
     mvpKeyFrameOrigins.clear();
 }
 
-} //namespace ORB_SLAM
+} // namespace ORB_SLAM2
